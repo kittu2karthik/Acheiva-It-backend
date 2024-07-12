@@ -5,23 +5,32 @@ const catchAsync = require("../utils/catchAsync");
 exports.createUserForm = catchAsync(async (req, res, next) => {
   try {
     console.log("Request Body:", req.body);
-    console.log("Uploaded File:", req.file);
+    // console.log("Uploaded File:", req.file); // Uncommented this line
 
-    const { name, phoneNumber, email, place, description } = req.body;
-    const fileUpload = req.file ? req.file.path : null;
+    const { name, phoneNumber, email, place, description, company } = req.body;
+    // const fileUpload = req.file ? req.file.path : null; // Uncommented this line
 
-    if (!fileUpload) {
-      return next(new AppError("File upload is required", 400));
+    // if (!fileUpload) {
+    //   return res.status(400).json({ message: "File upload is required" });
+    // }
+
+    // Check if a user form with the given email already exists
+    const existingUserForm = await UserForm.findOne({ email });
+    if (existingUserForm) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
-    const newUserForm = await UserForm.create({
+    // Create a new user form
+    const newUserForm = new UserForm({
       name,
       phoneNumber,
       email,
       place,
-      fileUpload,
       description,
+      company,
+      // fileUpload, // Added this line
     });
+    await newUserForm.save();
 
     res.status(201).json({
       status: "success",
@@ -30,6 +39,10 @@ exports.createUserForm = catchAsync(async (req, res, next) => {
       },
     });
   } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      return res.status(400).json({ message: "Email already exists" });
+    }
     console.error("Error creating user form:", error);
     next(error);
   }

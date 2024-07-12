@@ -8,14 +8,13 @@ const userFormSchema = new mongoose.Schema(
       trim: true,
     },
     phoneNumber: {
-      type: String,
+      type: Number,
       required: [true, "Phone number is required"],
       trim: true,
     },
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -24,11 +23,16 @@ const userFormSchema = new mongoose.Schema(
       required: [true, "Place is required"],
       trim: true,
     },
-    fileUpload: {
-      type: String,
-      required: [true, "File upload is required"],
-    },
+    // fileUpload: {
+    //   type: String,
+    //   required: [true, "File upload is required"],
+    // },
     description: {
+      type: String,
+      required: [true, "Description is required"],
+      trim: true,
+    },
+    company: {
       type: String,
       required: [true, "Description is required"],
       trim: true,
