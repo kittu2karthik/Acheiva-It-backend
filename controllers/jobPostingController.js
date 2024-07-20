@@ -6,7 +6,8 @@ const AppError = require("../utils/appError");
 // Existing function
 exports.getAllJobPostings = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(
-    JobPosting.find().populate("category"),
+    JobPosting.find(),
+    // .populate("category")
     req.query
   )
     .filter()
@@ -29,7 +30,8 @@ exports.getJobPostingsByCategory = catchAsync(async (req, res, next) => {
   const { categoryId } = req.params;
 
   const features = new APIFeatures(
-    JobPosting.find({ category: categoryId }).populate("category"),
+    JobPosting.find({ category: categoryId }),
+    // .populate("category"),
     req.query
   )
     .filter()
@@ -50,9 +52,10 @@ exports.getJobPostingsByCategory = catchAsync(async (req, res, next) => {
 // Get job posting by ID
 exports.getJobPostingById = catchAsync(async (req, res, next) => {
   console.log(req.params.id);
-  const jobPosting = await JobPosting.findById(req.params.id).populate(
-    "category"
-  );
+  const jobPosting = await JobPosting.findById(req.params.id);
+  // .populate(
+  //   "category"
+  // );
 
   if (!jobPosting) {
     return next(new AppError("No job posting found with that ID", 404));

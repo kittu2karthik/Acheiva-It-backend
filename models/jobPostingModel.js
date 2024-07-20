@@ -64,9 +64,15 @@ const jobPostingSchema = new mongoose.Schema({
     },
   },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "JobCategory",
+    type: String,
     required: true,
+    trim: true,
+    maxlength: [40, "A job posting must have less or equal then 40 characters"],
+    minlength: [3, "A job posting must have more or equal then 3 characters"],
+
+    // type: mongoose.Schema.Types.ObjectId,
+    // ref: "JobCategory",
+    // required: true,
   },
 });
 
